@@ -70,7 +70,7 @@ void printaCampos(string linha){
             cout << buf << " | ";
         }
     }
-    cout << endl;
+    cout << "\n\n";
 }
 
 // função que transforma a string entre aspas em numeros float
@@ -133,7 +133,6 @@ void armazenaEstrutura(vector<struct medicamento> &m, string linha){
     }
 
     // atribuições sem condições especiais
-
     getline(ss, buf, ',');
     novo.GGREM = buf;
     getline(ss, buf, ',');
@@ -350,6 +349,41 @@ void lerArquivo(vector<struct medicamento> &m){
             armazenaEstrutura(m, linha); // coloca os valores nos respectivos campos da estrutura
         }
     }
+    arq.close(); // fechamento do arquivo
+}
+
+// função que imprime na tela o produto com maior PF sem impostos
+void maiorPF(vector<struct medicamento> m){
+    vector<string> maior = {}; // vetor para armazenar o maior ou os maiores produtos
+    float maiorPF = m[0].PFSemImposto; // variavel que armazenará o maior preço e inicialmente será o preço do primeiro produto
+    maior.push_back(m[0].produto); // atribui como maior o primeiro produto
+
+    // loop para percorrer todos os produtos
+    for(int i = 1; i < m.size(); i++){
+        
+        //testa se o produto atual tem maior preço
+        if(m[i].PFSemImposto > maiorPF){
+            maior = {}; // atribui vazio pois pode ter mais de um elemento com valor maior que será substituído pelo novo maior
+            maiorPF = m[i].PFSemImposto; // valor do maiorPF é atualizado
+            maior[0] = m[i].produto; // nome do maior produto é atualizado
+        }else if(m[i].PFSemImposto == maiorPF){ // testa se o produto tem valor igual ao maior para adicionar a lista de maiores caso não seja um produto que já foi guardado
+                int flag = 0; // variável que irá servir para testar se o produto já pertence a lista
+                for(int j = 0; j < maior.size(); j++){ // loop para percorrer o(s) maiores produtos e verificar se o atual já consta na lista
+                    if(maior[j] == m[i].produto){
+                        flag++;
+                    }
+                }
+                if(flag == 0){ // se o produto não foi encontrado
+                    maior.push_back(m[i].produto); // adiciona na lista de maiores produtos
+                }
+        }
+    }
+    
+    // imprime o(s) maior(es) produto(s)
+    cout << "Produto(s) com maior PF sem impostos: " << endl;
+    for(int i = 0; i < maior.size(); i++){
+        cout << maior[i] << endl;
+    }
 }
 
 int main(){
@@ -358,6 +392,7 @@ int main(){
     vector<struct medicamento> m = {};
 
     lerArquivo(m);
+    maiorPF(m);
 
     return 0;
 }
