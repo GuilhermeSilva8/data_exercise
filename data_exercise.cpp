@@ -415,6 +415,32 @@ void tiposProdutos(vector<struct medicamento> m){
     cout << "\n\n";
 }
 
+// função que imprime no console o nome e preço do genérico mais barato
+void genericoBarato(vector<struct medicamento> m){
+    // loop para achar o primeiro generico e setar o preço deste como o menor
+    int primeiro;
+    float menor;
+    string nomeProduto;
+    for(primeiro = 0; primeiro < m.size(); primeiro++){
+        if(m[primeiro].statusProduto == "Genérico"){
+            break;
+        }
+    }
+    menor = m[primeiro].PFSemImposto;
+    nomeProduto = m[primeiro].produto;
+
+    // começa o loop a partir do próximo elemento e caso seja genérico e tenha preço menor, os valores são atualizados
+    for(int i = primeiro + 1; i < m.size(); i++){
+        if(m[i].statusProduto == "Genérico" && m[i].PFSemImposto < menor){
+            menor = m[i].PFSemImposto;
+            nomeProduto = m[i].produto;
+        }
+    }
+
+    // imprime o produto e o preço do genérico mais barato
+    cout << "Genérico mais barato é: " << nomeProduto << " e custa: R$ " << menor << "\n\n";
+}
+
 int main(){
     SetConsoleOutputCP(65001); // funcionalidade da biblioteca Windows.h que permite que o console trate os dados com utf-8 que é o formato dos caracteres do arquivo .csv
 
@@ -423,6 +449,7 @@ int main(){
     lerArquivo(m);
     maiorPF(m);
     tiposProdutos(m);
+    genericoBarato(m);
 
     return 0;
 }
