@@ -380,10 +380,39 @@ void maiorPF(vector<struct medicamento> m){
     }
     
     // imprime o(s) maior(es) produto(s)
-    cout << "Produto(s) com maior PF sem impostos: " << endl;
+    cout << "Produto(s) com maior(es) PF sem impostos: " << endl;
     for(int i = 0; i < maior.size(); i++){
         cout << maior[i] << endl;
     }
+
+    cout << "\n";
+}
+
+//função que imprime na tela os possíveis tipos de produtos
+void tiposProdutos(vector<struct medicamento> m){
+    
+    vector<string> tipos = {}; // vetor que irá armazenar os tipos que já foram printados
+    tipos.push_back(m[0].statusProduto); // coloca no vetor o tipo do primeiro produto
+    cout << "Tipos de produtos:" << endl;
+    cout << "| " << tipos[0] << " | "; // imprime o primeiro tipo de produto
+
+    // loop para percorrer todos os medicamentos e imprimir na tela o tipo caso ainda não tenha sido printado
+    for(int i = 1; i < m.size(); i++){
+        string tipoAtual = m[i].statusProduto;
+        int flag = 0;
+        for(int j = 0; j < tipos.size(); j++){
+            if(tipoAtual == tipos[j]){ // se já está na lista
+                flag++;
+                break;
+            }
+        }
+        // caso não tenha sido encontrado na lista
+        if(flag == 0){
+            tipos.push_back(tipoAtual); // adiciona no vetor de já impressos
+            cout <<  tipoAtual << " | "; // imprime na tela o tipo
+        }
+    }
+    cout << "\n\n";
 }
 
 int main(){
@@ -393,6 +422,7 @@ int main(){
 
     lerArquivo(m);
     maiorPF(m);
+    tiposProdutos(m);
 
     return 0;
 }
