@@ -441,6 +441,260 @@ void genericoBarato(vector<struct medicamento> m){
     cout << "Genérico mais barato é: " << nomeProduto << " e custa: R$ " << menor << "\n\n";
 }
 
+// função que salva todos os registros com o preço final sem impostos superior a ‘100’, com comercialização 2018 marcada como ‘Sim’ e que sejam Tarja Vermelha em um arquivo chamado “output.csv”
+void salvaRegistros(vector<struct medicamento> m){
+   
+    ofstream registro; // cria variavel de arquivo de saída
+    registro.open("output.csv"); // abre o arquivo
+    // loop para percorrer os registros e armazenar no arquivo de saída caso atenda as condições
+    for(int i = 0; i < m.size(); i++){
+        if(m[i].PFSemImposto > 100 && m[i].comercializacao2020 == "Sim" && m[i].tarja == "Tarja  Vermelha"){
+            if(m[i].substancia.find(",") != -1){
+                registro << "\"";
+                registro << m[i].substancia;
+                registro << "\"";
+                registro << ",";
+            }else registro << m[i].substancia << ",";
+            
+            registro << m[i].CNPJ << ",";
+
+            if(m[i].laboratorio.find(",") != -1){
+                registro << "\"";
+                registro << m[i].laboratorio;
+                registro << "\"";
+                registro << ",";
+            }else registro << m[i].laboratorio << ",";
+            
+            registro << m[i].GGREM << ",";
+            registro << m[i].registro << ",";
+            registro << m[i].EAN1 << ",";
+            registro << m[i].EAN2 << ",";
+            registro << m[i].EAN3 << ",";
+
+            if(m[i].produto.find(",") != -1){
+                registro << "\"";
+                registro << m[i].produto;
+                registro << "\"";
+                registro << ",";
+            }else registro << m[i].produto << ",";
+            
+            if(m[i].apresentacao.find(",") != -1){
+                registro << "\"";
+                registro << m[i].apresentacao;
+                registro << "\"";
+                registro << ",";
+            }else registro << m[i].apresentacao << ",";
+            
+            if(m[i].classeTerapeutica.find(",") != -1){
+                registro << "\"";
+                registro << m[i].classeTerapeutica;
+                registro << "\"";
+                registro << ",";
+            }else registro << m[i].classeTerapeutica << ",";
+            
+            registro << m[i].statusProduto << ",";
+            registro << m[i].regimePreco << ",";
+
+            registro << m[i].PFSemImposto << ",";
+            registro << m[i].PF0 << ",";
+            registro << m[i].PF12 << ",";
+            registro << m[i].PF17 << ",";
+            registro << m[i].PF17ALC << ",";
+            registro << m[i].PF175 << ",";                     
+            registro << m[i].PF175ALC << ",";          
+            registro << m[i].PF18 << ",";
+            registro << m[i].PF18ALC << ",";
+            registro << m[i].PF20 << ",";
+            registro << m[i].PMC0 << ",";
+            registro << m[i].PMC12 << ",";
+            registro << m[i].PMC17 << ",";
+            registro << m[i].PMC17ALC << ",";
+            registro << m[i].PMC175 << ",";
+            registro << m[i].PMC175ALC << ",";
+            registro << m[i].PMC18 << ",";
+            registro << m[i].PMC18ALC << ",";
+            registro << m[i].PMC20 << ",";
+
+            registro << m[i].restricaoHospitalar << ",";
+            registro << m[i].CAP << ",";
+            registro << m[i].CONFAZ87 << ",";
+            registro << m[i].ICMS0 << ",";
+            registro << m[i].analiseRecursal << ",";
+            registro << m[i].listaCCT << ",";
+            registro << m[i].comercializacao2020 << ",";
+            registro << m[i].tarja << "\n";
+        }  
+    }
+    registro.close(); // fecha o arquivo
+}
+
+// função que coloca os dados nos seus respectivos campos da estrutura
+void armazenaOutput(vector<struct medicamento> &m, string linha){
+    struct medicamento novo; // cria a estrutura que receberá todos os dados da linha
+    string buf; // variavel que irá receber as palavras da linha
+    stringstream ss(linha); // transforma a string em stream para acessar palavra por palavra separadamente
+
+    // pega a informação de cada campo e armazena na estrutura
+
+    // necessário criar condição para o caso de as existir substância com seus componentes divididos por vírgula
+    getline(ss, buf, ',');
+    if(buf.find("\"") != -1){ 
+        string auxBuf;
+        getline(ss, auxBuf, '\"'); // pega o resto do contéudo
+        buf[0] = ' ';
+        novo.substancia = buf + ',' + auxBuf; // junta o conteúdo existente antes da primeira e após a primeira vírgula
+        getline(ss, buf, ','); // elimina a vírgula que divide esse do próximo
+    }else{
+        novo.substancia = buf;
+    }
+    
+    // atribuição sem condições especiais
+    getline(ss, buf, ',');
+    novo.CNPJ = buf;
+
+    // necessário verificar se existe nome de laboratório separado por vírgula
+    getline(ss, buf, ',');
+    if(buf.find("\"") != -1){ 
+        string auxBuf;
+        getline(ss, auxBuf, '\"'); // pega o resto do contéudo
+        buf[0] = ' ';
+        novo.laboratorio = buf + ',' + auxBuf; // junta o conteúdo existente antes da primeira e após a primeira vírgula
+        getline(ss, buf, ','); // elimina a vírgula que divide esse do próximo
+    }else{
+        novo.laboratorio = buf;
+    }
+
+    // atribuições sem condições especiais
+    getline(ss, buf, ',');
+    novo.GGREM = buf;
+    getline(ss, buf, ',');
+    novo.registro = buf;
+    getline(ss, buf, ',');
+    novo.EAN1 = buf;
+    getline(ss, buf, ',');
+    novo.EAN2 = buf;
+    getline(ss, buf, ',');
+    novo.EAN3 = buf;
+
+    // necessário criar uma condição caso o produto, apresentação ou classe terapêutica contenham valores decimais(com vírgula)
+    getline(ss, buf, ',');
+    if(buf.find("\"") != -1){ 
+        string auxBuf;
+        getline(ss, auxBuf, '\"'); // pega o resto do contéudo
+        buf[0] = ' ';
+        novo.produto = buf + ',' + auxBuf; // junta o conteúdo existente antes da primeira e após a primeira vírgula
+        getline(ss, buf, ','); // elimina a vírgula que divide esse do próximo
+    }else{
+        novo.produto = buf;
+    }
+
+    getline(ss, buf, ',');
+    if(buf.find("\"") != -1){ 
+        string auxBuf;
+        getline(ss, auxBuf, '\"'); // pega o resto do contéudo
+        buf[0] = ' ';
+        novo.apresentacao = buf + ',' + auxBuf; // junta o conteúdo existente antes da primeira e após a primeira vírgula
+        getline(ss, buf, ','); // elimina a vírgula que divide esse do próximo
+    }else{
+        novo.apresentacao = buf;
+    }
+
+    getline(ss, buf, ',');
+    if(buf.find("\"") != -1){ 
+        string auxBuf;
+        getline(ss, auxBuf, '\"'); // pega o resto do contéudo
+        buf[0] = ' ';
+        novo.classeTerapeutica = buf + ',' + auxBuf; // junta o conteúdo existente antes da primeira e após a primeira vírgula
+        getline(ss, buf, ','); // elimina a vírgula que divide esse do próximo
+    }else{
+        novo.classeTerapeutica = buf;
+    }
+
+    // atribuições sem condições especiais
+    getline(ss, buf, ',');
+    novo.statusProduto = buf;
+    getline(ss, buf, ',');
+    novo.regimePreco = buf;
+
+    // atribuições de número float
+    getline(ss, buf, ',');
+    novo.PFSemImposto = stof(buf);
+    getline(ss, buf, ',');
+    novo.PF0 = stof(buf);
+    getline(ss, buf, ',');
+    novo.PF12 = stof(buf);
+    getline(ss, buf, ',');
+    novo.PF17 = stof(buf);
+    getline(ss, buf, ',');
+    novo.PF17ALC = stof(buf);
+    getline(ss, buf, ',');
+    novo.PF175 = stof(buf);
+    getline(ss, buf, ',');
+    novo.PF175ALC = stof(buf);
+    getline(ss, buf, ',');
+    novo.PF18 = stof(buf);
+    getline(ss, buf, ',');
+    novo.PF18ALC = stof(buf);
+    getline(ss, buf, ',');
+    novo.PF20 = stof(buf);
+    getline(ss, buf, ',');
+    novo.PMC0 = stof(buf);
+    getline(ss, buf, ',');
+    novo.PMC12 = stof(buf);
+    getline(ss, buf, ',');
+    novo.PMC17 = stof(buf);
+    getline(ss, buf, ',');
+    novo.PMC17ALC = stof(buf);
+    getline(ss, buf, ',');
+    novo.PMC175 = stof(buf);
+    getline(ss, buf, ',');
+    novo.PMC175ALC = stof(buf);
+    getline(ss, buf, ',');
+    novo.PMC18 = stof(buf);
+    getline(ss, buf, ',');
+    novo.PMC18ALC = stof(buf);  
+    getline(ss, buf, ',');
+    novo.PMC20 = stof(buf);
+    
+    // atribuições sem condições especiais
+    getline(ss, buf, ',');
+    novo.restricaoHospitalar = buf;
+    getline(ss, buf, ',');
+    novo.CAP = buf;
+    getline(ss, buf, ',');
+    novo.CONFAZ87 = buf;
+    getline(ss, buf, ',');
+    novo.ICMS0 = buf;
+    getline(ss, buf, ',');
+    novo.analiseRecursal = buf;
+    getline(ss, buf, ',');
+    novo.listaCCT = buf;
+    getline(ss, buf, ',');
+    novo.comercializacao2020 = buf;
+    getline(ss, buf, ',');
+    novo.tarja = buf;
+
+    // adiciona a linha no conjunto
+    m.push_back(novo);
+}
+
+// função para ler o arquivo .csv e armazenar na estrutura medicamento
+void lerOutput(vector<struct medicamento> &m){
+    ifstream arq; // declaração de variavel para entrada do arquivo
+    arq.open("output.csv"); // abertura do arquivo
+    if(!arq.is_open()) // teste para certificar que o arquivo abriu corretamente
+        cout << "Erro ao tentar abrir arquivo!" << endl;
+    else{
+        string linha; // irá receber as linhas que forem lidas do arquivo
+        getline(arq, linha); // le a primeira linha que corresponde ao nome dos campos do arquivo
+        while(getline(arq, linha)){ // enquanto houver linhas no arquivo executa o loop
+            armazenaOutput(m, linha); // coloca os valores nos respectivos campos da estrutura
+        }
+    }
+    arq.close(); // fechamento do arquivo
+}
+
+
 int main(){
     SetConsoleOutputCP(65001); // funcionalidade da biblioteca Windows.h que permite que o console trate os dados com utf-8 que é o formato dos caracteres do arquivo .csv
 
@@ -450,6 +704,10 @@ int main(){
     maiorPF(m);
     tiposProdutos(m);
     genericoBarato(m);
+    salvaRegistros(m);
+
+    vector<struct medicamento> m2 = {};
+    lerOutput(m2);
 
     return 0;
 }
