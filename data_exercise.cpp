@@ -694,6 +694,104 @@ void lerOutput(vector<struct medicamento> &m){
     arq.close(); // fechamento do arquivo
 }
 
+// função que ordena o output em ordem alfabética
+/*void ordenaProduto(vector<struct medicamento> m){
+    vector<struct medicamento> ordenado(m.size());
+    struct medicamento novo;
+    novo.substancia = m[0].substancia;
+    novo.CNPJ = m[0].CNPJ;
+    novo.laboratorio = m[0].laboratorio;
+    novo.GGREM = m[0].GGREM;
+    novo.registro = m[0].registro;
+    novo.EAN1 = m[0].EAN1;
+    novo.EAN2 = m[0].EAN2;
+    novo.EAN3 = m[0].EAN3;
+    novo.produto = m[0].produto;
+    novo.apresentacao = m[0].apresentacao;
+    novo.classeTerapeutica = m[0].classeTerapeutica;
+    novo.statusProduto = m[0].statusProduto;
+    novo.regimePreco = m[0].regimePreco;
+    novo.PFSemImposto = m[0].PFSemImposto;
+    novo.PF0 = m[0].PF0;
+    novo.PF12 = m[0].PF12;
+    novo.PF17 = m[0].PF17;
+    novo.PF17ALC = m[0].PF17ALC;
+    novo.PF175 = m[0].PF175;
+    novo.PF175ALC = m[0].PF175ALC;
+    novo.PF18 = m[0].PF18;
+    novo.PF18ALC = m[0].PF18ALC;
+    novo.PF20 = m[0].PF20;
+    novo.PMC0 = m[0].PMC0;
+    novo.PMC12 = m[0].PMC12;
+    novo.PMC17 = m[0].PMC17;
+    novo.PMC17ALC = m[0].PMC17ALC;
+    novo.PMC175 = m[0].PMC175;
+    novo.PMC175ALC = m[0].PMC175ALC;
+    novo.PMC18 = m[0].PMC18;
+    novo.PMC18ALC = m[0].PMC18ALC;
+    novo.PMC20 = m[0].PMC20;
+    novo.restricaoHospitalar = m[0].restricaoHospitalar;
+    novo.CAP = m[0].CAP;
+    novo.CONFAZ87 = m[0].CONFAZ87;
+    novo.ICMS0 = m[0].ICMS0;
+    novo.analiseRecursal = m[0].analiseRecursal;
+    novo.listaCCT = m[0].listaCCT;
+    novo.comercializacao2020 = m[0].comercializacao2020;
+    novo.tarja = m[0].tarja;
+    ordenado.push_back(novo);
+
+    // percorre todos os elementos da estrutura
+    for(int i = 1; i < m.size(); i++){
+        novo.substancia = m[i].substancia;
+        novo.CNPJ = m[i].CNPJ;
+        novo.laboratorio = m[i].laboratorio;
+        novo.GGREM = m[i].GGREM;
+        novo.registro = m[i].registro;
+        novo.EAN1 = m[i].EAN1;
+        novo.EAN2 = m[i].EAN2;
+        novo.EAN3 = m[i].EAN3;
+        novo.produto = m[i].produto;
+        novo.apresentacao = m[i].apresentacao;
+        novo.classeTerapeutica = m[i].classeTerapeutica;
+        novo.statusProduto = m[i].statusProduto;
+        novo.regimePreco = m[i].regimePreco;
+        novo.PFSemImposto = m[i].PFSemImposto;
+        novo.PF0 = m[i].PF0;
+        novo.PF12 = m[i].PF12;
+        novo.PF17 = m[i].PF17;
+        novo.PF17ALC = m[i].PF17ALC;
+        novo.PF175 = m[i].PF175;
+        novo.PF175ALC = m[i].PF175ALC;
+        novo.PF18 = m[i].PF18;
+        novo.PF18ALC = m[i].PF18ALC;
+        novo.PF20 = m[i].PF20;
+        novo.PMC0 = m[i].PMC0;
+        novo.PMC12 = m[i].PMC12;
+        novo.PMC17 = m[i].PMC17;
+        novo.PMC17ALC = m[i].PMC17ALC;
+        novo.PMC175 = m[i].PMC175;
+        novo.PMC175ALC = m[i].PMC175ALC;
+        novo.PMC18 = m[i].PMC18;
+        novo.PMC18ALC = m[i].PMC18ALC;
+        novo.PMC20 = m[i].PMC20;
+        novo.restricaoHospitalar = m[i].restricaoHospitalar;
+        novo.CAP = m[i].CAP;
+        novo.CONFAZ87 = m[i].CONFAZ87;
+        novo.ICMS0 = m[i].ICMS0;
+        novo.analiseRecursal = m[i].analiseRecursal;
+        novo.listaCCT = m[i].listaCCT;
+        novo.comercializacao2020 = m[i].comercializacao2020;
+        novo.tarja = m[i].tarja;
+        // acha a posição que o elemento atual deve entrar no vetor ordenado
+        for(int j = 0; j < i; j++){
+            if(m[i].produto > ordenado[j].produto){
+                int position = j + 1;
+                ordenado.insert(ordenado.begin() + position, novo);
+            }
+        }
+    }
+    salvaRegistros(ordenado);
+}*/
 
 int main(){
     SetConsoleOutputCP(65001); // funcionalidade da biblioteca Windows.h que permite que o console trate os dados com utf-8 que é o formato dos caracteres do arquivo .csv
@@ -708,6 +806,7 @@ int main(){
 
     vector<struct medicamento> m2 = {};
     lerOutput(m2);
+    //ordenaProduto(m2);
 
     return 0;
 }
